@@ -13,11 +13,15 @@ class TodoListViewController: UITableViewController {
     // MARK: - Properties
     
     var itemArray = ["Find Mike", "Buy Eggos", "Destory Demogorgon"]
+    let defaults = UserDefaults.standard
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
 
     // MARK: - TableView Datasource Methods
@@ -51,6 +55,7 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { action in
             // what will happen once the user clicks the Add Item button on our UIAlert
             self.itemArray.append(textField.text ?? "New Item")
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
             self.tableView.reloadData()
         }
         alert.addTextField { alertTextField in
